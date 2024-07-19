@@ -1,0 +1,192 @@
+
+04/March/2021
+
+Initial instance of package.
+Version 0.0-1.
+
+04/March/2021
+
+Amended the code to allow the permutations to be effected by
+permuting residuals in the case of one-way anova and that of testing
+for a main effect, as well as testing for an interaction
+Introduced a new argument "permtype" specifying which sort
+of permutation (residuals or data) should be used.
+
+Added a vignette providing mathematical expressions for the
+test statistics used.
+
+Incremented the version number.
+Version 0.0-2.
+
+Made a slight tweak to the vignette.
+
+Incremented the version number.
+Version 0.0-3.
+
+09/March/2021
+Corrected a stupid error that I had made in calculating the residuals
+to be permuted.  These must be residuals from null model and I was
+calculating residuals from the full model.
+
+Incremented the version number.
+Version 0.0-4.
+
+15/March/2021
+Amended the code to accept as input ("datObj") a list of numeric vectors
+to be interpreted as K-functions.  Note that in this case "datObj" must
+have an attribute "r" serving as the argument of these K-functions.
+
+Note that these putative K-functions may actually be *scalars* (which
+allows "ordinary" analysis of variance to be conducted).  In this case
+the "r" attribute must also be a scalar (and is arbitrary).
+
+Incremented the version number.
+Version 0.0-5.
+
+21/March/2021
+Added a new version of kanova() (kanova2()) with a substantially
+altered data structure and procedure for effecting the permutations.
+
+Incremented the version number.
+Version 0.0-6.
+
+20/February/2023
+Replace kanova() by kanova2().
+
+Substantially revised and debugged.  Corrected the (essentially backwards)
+indexing of the data.
+
+Added an argument "studentize", defaulting to TRUE, permitting the
+user to *NOT* studentize the test statistic.  This argument was
+added basically to permit the comparison of the test statistic with
+one that can be computed in a simple-minded manner in the case of
+scalar "K functions".
+
+Incremented the version number.
+Version 0.0-7.
+
+26/February/2023
+Adjusted kanova() to use a formula argument.
+
+Incremented the version number.
+Version 0.0-8.
+
+27/February/2023
+Copied kanova.R to kanovaDB.R (making kanovaDB() an internal
+function) and got rid of the studentize argument from kanova().
+WTF does "DB" mean?  Said he on 15/May/2023.  Perhaps "debug"?
+
+Incremented the version number.
+Version 0.0-9.
+
+15/May/2023
+
+Started adjusting the residuals to be "standardised" residuals, in
+the hope that this may enhance exchangeability when the permutation
+test is conducted by means of permuting the residuals.
+
+05/June/2023
+Realised that I need to get my head together on the resulting Studentisation
+variance.  Re-wrote the vignette testStat.ltx.
+
+05/July/2023
+Extensive revision of the kanova function completed.  It is now
+assumed that under the null hypothesis (of no group effect[s]) the
+variance of the K-function associated with a pattern X is equal to
+sigma^2/m where m is the number of points in X.  The calculation
+of the test statistic becomes thereby much cleaner and to some
+extent simpler.  Estimates of K-functions are now calculated as
+weighted means of individual K-functions, with the weights being
+the numbers of points in the associated patterns. See the vignette
+"testStat" for more discussion.
+
+Eliminated the auxiliary functions kanovaEngine(), permDatMat()
+and statPrep().  Added auxiliary functions permSumFns(), resAndFit(),
+testStat(), and wtdMeans().
+
+Incremented the version number.
+Version 0.0-10.
+
+05/July/2023
+Revised initPrep() so that, if desired, the names of the levels of
+the classification factors can be "simplified".  This is effected
+by giving kanova() a new argument "simpNms".
+
+Incremented the version number.
+Version 0.0-11.
+
+25/04/2024
+Modified kanova() so that if "fmla" involves a variable not found
+in "data" then that variable is looked for in parent.frame().  If
+it is still not found, then an error (with an appropriate message)
+is thrown.
+
+Incremented the version number.
+Version 0.0-12.
+
+01/05/2024
+Modified the structure so that the data must *alway* be a hyperframe.
+The response column of this hyperframe is now allowed to be a list of
+numeric vectors (the ostensible summary functions of point patterns),
+and not just a list of point patterns.  Made numerous adjustments
+to kanova.R and initPrep.R.  Got rid of the "simNms" and "iperm"
+arguments to kanova().  Added a "brief=TRUE" argument to kanova();
+if "brief" is FALSE, then a more elaborate object is returned.
+Added an "EffectName" component to the list being returned.
+Made "Tstar" a component of the list being returned, when "brief"
+is FALSE (rather than an attribute created when "keepsimstats"
+is TRUE (and got rid of the argument "keepsimstats").
+
+Added examples to the kanova help file, illustrating the scenario
+in which the response is a list of numeric vectors.  Also an example
+in which these numeric vectors are actually scalars.  (Example taken
+from the Devore7 package; the DESCRIPTION file now suggests Devore7.)
+
+Substantial change, so incremented the minor version number.
+
+05/05/2024
+Corrected a typo (Pseudi |--> Pseudo) in the DESCRIPTION file.
+
+Incremented the version number.
+Version 0.1-1.
+
+17/05/2024
+Corrected major (conceptual!) bug w.r.t. creation of the mean summary
+functions and the studentising variances. Revised the way these means
+and variances are stored --- put them into "data", where they should
+have been put all along!
+
+05/06/2024
+
+The foregoing "Revised the way ..." is not actually correct. The mean summary
+functions and the studentisation have however been corrected.
+
+Fixed various bugs/glitches in testStat().
+
+Incremented the version number.
+Version 0.1-3.
+
+30/06/2024
+
+Revised builds2Khat(), fixing various (major!) glitches.
+Introduced the logical argument do.s2; if this is FALSE, s2
+does not get calculated.  Discontinued use of wtdMeans() --- which
+wasn't being used correctly --- and replaced calls to wtdMeans()
+with calls to builds2Khat(...,do.s2=FALSE)
+
+Fixed a bug in resAndFit() (when "type" was equal to "interac",
+tried to extract Khat from iDat; no such component any longer;
+never should have been there).
+
+04/07/2024
+
+Fixed same bug (!!!) when type was equal to "oneway".
+
+Revised the "testStat" vignette a bit.
+
+19/07/2024
+
+Further fiddling with the vignette.
+
+Incremented the version number.
+Version 0.1-4.
