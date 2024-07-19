@@ -1,7 +1,0 @@
-
-# Export everything.
-exportPattern("^[^.]")
-importFrom("spatstat.geom","hyperframe","is.hyperframe",
-           "as.hyperframe","owin","plot.ppp","npoints")
-importFrom("spatstat.explore","Kest","Gest","Fest","studpermu.test")
-importFrom("stats","terms","formula")
