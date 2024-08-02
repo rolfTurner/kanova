@@ -1,6 +1,6 @@
 kanova <- function(fmla,data,sumFnNm=c("Kest","Fest","Gest","Jest"),
                    test=TRUE,infertype=c("resperm","datperm","gaussSample"),
-                   ninfer=99,brief=TRUE,verb=TRUE) {
+                   nsam=99,brief=TRUE,verb=TRUE) {
 #
 # Function to conduct one or two-way pseudo analysis of variance of
 # summary functions (Kest, Fest, Gest, or Jest)  of replicated point
@@ -88,24 +88,25 @@ if(infertype=="resperm") {
 }
 if(infertype=="gaussSample") {
     splif <- switch(EXPR=type,oneway="A",addit="A",interac="AB")
-    xxx   <- with(iDat,builds2Khat(sumFns,wts,splif,do.s2=TRUE)
+    xxx   <- with(iDat,builds2Khat(sumFns,wts,splif,do.s2=TRUE))
     s2    <- xxx$s2
     Khat  <- xxx$Khat
 } else {
-    s2   <- NULL
-    Khat <- NULL
+    splif <- NULL
+    s2    <- NULL
+    Khat  <- NULL
 }
 
-Tstar <- numeric(nperm)
-for(i in 1:nperm) {
-    sSumFns  <- simSumFns(iDat[["sumFns"]],iDat[["B"]],rAndF,infertype)
+Tstar <- numeric(nsam)
+for(i in 1:nsam) {
+    sSumFns  <- simSumFns(iDat[["sumFns"]],iDat[["B"]],rAndF,splif,s2,Khat,infertype)
     Tstar[i] <- with(iDat,testStat(sSumFns,A,B,AB,wts,r,type=type))
     if(verb) cat(i,"")
     if(verb & i%%10 == 0) cat("\n")
 }
 if(verb & i%%10 != 0) cat("\n")
 m    <- sum(Tstar >= Tobs)
-pv   <- (m+1)/(nperm+1)
+pv   <- (m+1)/(nsam+1)
 bres <- list(EffectName=effNm,stat=Tobs,pvalue=pv)
 if(brief) {
     rslt <- bres
