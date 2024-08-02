@@ -67,6 +67,7 @@ the number of points in pattern $X_{ij}$ or pattern $X_{ijk}$
 respectively.
 
 \section{Estimating the variance}
+\label{sec:estVar}
 Under the null hypothesis of ``no group effect(s)'' the variance function
 $\sigma^2(r)$ may be estimated by
 \begin{equation}
@@ -80,7 +81,8 @@ the number of points in the $i$th pattern in the $\ell$th group.
 The function $K_{\ell i}(r)$ is the (estimated) $K$-function
 estimate corresponding to the $i$th pattern in the $\ell$th group,
 and $\tilde{K}_{\ell \pullet(r)}$ is the ``over all'' estimate of
-the $K$-function for the $\ell$th group.  More detail is given below.
+the $K$-function for the $\ell$th group.  More detail is given in
+section~\ref{sec:estKfns}.
 
 In the one grouping factor setting the number of groups $g$ is
 the number of levels of the (single) grouping factor  In the two
@@ -92,7 +94,7 @@ sum of squares that appears in ``ordinary'' analysis of variance,
 but the error sum of squares plays no explicit role in the tests
 used in the current context.
 
-For completeness we now give the explicit expressions for $s^2(r)$
+For completeness we give, below, explicit expressions for $s^2(r)$
 in the single grouping factor (one-way) setting, and in the two
 grouping factor (two-way) setting:
 \[
@@ -113,10 +115,10 @@ of \eqref{eq:estvarfun}.
 \section{Estimates of $K$-functions}
 \label{sec:estKfns}
 
-The observed $K$-function estimate, based on the $i$th pattern in
-the $\ell$th group, is denoted by $K_{\ell i}(r)$.
-In this setting the estimated $K$ function corresponding to the
-$\ell$th group is
+As indicated in section~\ref{sec:estVar}, the observed $K$-function
+estimate, based on the $i$th pattern in the $\ell$th group, is
+denoted by $K_{\ell i}(r)$.  In this setting the estimated $K$
+function corresponding to the $\ell$th group is
 \[
 \tilde{K}_\ell(r) = \sum_{j=1}^{n_{\ell}}
                    \frac{w_{\ell j}}{w_{\ell \pullet}} K_{\ell j}(r)
@@ -185,10 +187,10 @@ In ``ordinary'' analysis of variance we test for an effect of
 factor A, allowing for a second factor B, by first calculating the
 regression sum of squares
 \[
-SSA = \sum_{i=1}^a n_i \times (\bar{X}_{i \pullet \pullet} -
-                                     \bar{X}_{\pullet \pullet \pullet})^2
+SSA = \sum_{i=1}^a n_i \times (\bar{O}_{i \pullet \pullet} -
+                                     \bar{O}_{\pullet \pullet \pullet})^2
 \]
-where $X_{ijk}$, $k = 1, \ldots, n_i$, are the observations in
+where $O_{ijk}$, $k = 1, \ldots, n_i$, are the observations in
 cell $(i,j)$ of the model.   Note that in calculating $SSA$ we
 are in effect ignoring factor B completely and proceeding as if A
 were the only classification factor.  Allowance is made for the B
@@ -242,7 +244,7 @@ V_{ABij}(r) = s^2(r) \left ( \frac{1}{w_{i j \pullet}} - \frac{1}{w_{i \pullet \
 \right )
 \end{equation}
 where, as before, $s^2(r)$ is the overall sample variance
-given by \eqref{eq:estvarfun}.
+given by \eqref{eq:estvarfun}.  (See Appendix I.)
 
 \bibliographystyle{plainnat}
 \bibliography{kanova}
@@ -355,7 +357,7 @@ and those corresponding to factor B are 0, 5 and 10.  Note that the
 B effect is much``larger'' than the A effect and would overwhelm
 the A effect unless appropriate steps were taken.
 
-In an additive model the ``cell means'' are:
+In an additive model the population ``cell means'' are:
 \begin{table}[H]
 \caption{\label{tab:exmpl}}
 \begin{center}
@@ -391,12 +393,15 @@ This will happen if we permute the data ``within the levels
 of B'', i.e. if we permute, separately, each of the columns of
 Table~\ref{tab:exmpl}.  If we permute the data in this manner,
 then the $T_i^*$ that are produced are all small relative to $T$.
-In fact, in this particular (artificial) example, all possible
+In fact, in this particular (artificial) example, it is possible
+to enumerate all 13824 values of $T_i^*$ that arise from permuting
+the data within the levels of B.  These are all less than or equal
+to $T = 0.2$.
+
 $T_i^*$, that arise from permuting the data within the levels of B,
 are less than or equal to $T = 0.2$.
 
-However if we simply permute the data as if A were the only factor,
-and ignore B (i.e. proceed as if we were doing a one-way analysis)
+However if we fail to permute the data within the levels of B,
 then from time to time large values will be grouped together, within
 a level of factor A, with other large values.  This phenomenon
 results in the creation of means, for one or more levels $A_i$ of
@@ -406,11 +411,12 @@ an arbitrary permutation of the 12 data values might result in
 \begin{table}[H]
 \caption{\label{tab:arbperm}}
 \begin{center}
-\begin{tabular}{|l|l|l|l|} \hline
-$A_1$ & 10.4 & 10.6 &  5.8 \\ \hline
-$A_2$ &  0.8 & 10.8 &  0.2 \\ \hline
-$A_3$ &  5.6 &  5.2 &  0.6 \\ \hline
-$A_4$ &  0.4 &  5.4 & 10.2 \\ \hline
+\begin{tabular}{|l|l|l|l|l|} \hline
+\multicolumn{4}{|c}{} & \multicolumn{1}{|c|}{mean} \\ \hline
+$A_1$ & 10.4 & 10.6 &  5.8 & 8.9333 \\ \hline
+$A_2$ &  0.8 & 10.8 &  0.2 & 3.9333 \\ \hline
+$A_3$ &  5.6 &  5.2 &  0.6 & 3.8000 \\ \hline
+$A_4$ &  0.4 &  5.4 & 10.2 & 5.3333 \\ \hline
 \end{tabular}
 \end{center}
 \end{table}

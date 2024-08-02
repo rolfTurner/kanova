@@ -215,7 +215,12 @@ attr(X,"r") <- r
 set.seed(118)
 s5   <- kanova(rsp ~ fac1*fac2,data=X,brief=FALSE)
 
+# Winbuilder says the total time for these examples is 12.14 > 10.00 seconds.
+# I get only 8.927 seconds in my timing calculations. (???) Irrespective of
+# that, I am cutting the following bit to reduce the time.
+
 # Scalar data.
+\dontrun{
 if(require(Devore7)) {
     X   <- spatstat.geom::as.hyperframe(xmp11.10)
     s6a <- kanova(Tempr ~ Period*Strain,data=X,nperm=999)
@@ -224,6 +229,7 @@ if(require(Devore7)) {
     chk <- lm(Tempr ~ Period*Strain,data=X)
 # anova(chk) reveals p-values that are at least roughly
 # similar to those in s6a, s6b, and s6c.
+}
 }
 }
 

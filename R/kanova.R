@@ -1,15 +1,15 @@
 kanova <- function(fmla,data,sumFnNm=c("Kest","Fest","Gest","Jest"),
-                   test=TRUE,permtype=c("resids","data"),nperm=99,
-                   brief=TRUE,verb=TRUE) {
+                   test=TRUE,infertype=c("resperm","datperm","gaussSample"),
+                   ninfer=99,brief=TRUE,verb=TRUE) {
 #
-# Function to conduct one or two-way analysis of variance of
+# Function to conduct one or two-way pseudo analysis of variance of
 # summary functions (Kest, Fest, Gest, or Jest)  of replicated point
 # patterns classified by a grouping factor A or two grouping factors
 # A and B.
 #
 
-sumFnNm  <- match.arg(sumFnNm)
-permtype <- match.arg(permtype)
+sumFnNm   <- match.arg(sumFnNm)
+infertype <- match.arg(infertype)
 
 if(length(fmla)==2) {
     if(inherits(data,"hyperframe")) {
@@ -57,8 +57,8 @@ switch(EXPR=npreds,
      if(preds[3] != paste0(Anm,":",Bnm)) {
          stop("Argument \"fmla\" is of an incorrect form.\n")
      }
-     if(permtype=="data")
-        stop("Cannot use permtype=\"data\" when there is interaction in the model.\n")
+     if(infertype=="data")
+        stop("Cannot use infertype=\"data\" when there is interaction in the model.\n")
      type <- "interac"
      effNm <- paste0("interaction of ",Anm," with ",Bnm)
     }
@@ -73,24 +73,33 @@ if(!test) {
        rslt <- list(stat=Tobs)
    } else {
        rslt <- list(fmla=fmla,data=data,sumFnNm=sumFnNm,
-                    permtype=permtype,stat=Tobs)
+                    infertype=infertype,stat=Tobs)
    }
    class(rslt) <- "kanova"
    return(rslt)
 }
 
 # Testing;  carry out the Monte Carlo test.
-# If permtype is "resids", create the fitted values and residuals.
-if(permtype=="resids") {
+# If infertype is "resperm", create the fitted values and residuals.
+if(infertype=="resperm") {
    rAndF <- resAndFit(iDat,type) # List with components "resids" and "fitVals".
 } else {
    rAndF <- NULL
 }
+if(infertype=="gaussSample") {
+    splif <- switch(EXPR=type,oneway="A",addit="A",interac="AB")
+    xxx   <- with(iDat,builds2Khat(sumFns,wts,splif,do.s2=TRUE)
+    s2    <- xxx$s2
+    Khat  <- xxx$Khat
+} else {
+    s2   <- NULL
+    Khat <- NULL
+}
 
 Tstar <- numeric(nperm)
 for(i in 1:nperm) {
-    pSumFns  <- permSumFns(iDat[["sumFns"]],iDat[["B"]],rAndF,permtype)
-    Tstar[i] <- with(iDat,testStat(pSumFns,A,B,AB,wts,r,type=type))
+    sSumFns  <- simSumFns(iDat[["sumFns"]],iDat[["B"]],rAndF,infertype)
+    Tstar[i] <- with(iDat,testStat(sSumFns,A,B,AB,wts,r,type=type))
     if(verb) cat(i,"")
     if(verb & i%%10 == 0) cat("\n")
 }
@@ -102,7 +111,7 @@ if(brief) {
     rslt <- bres
 } else {
     rslt <- c(bres,list(fmla=fmla,data=data,sumFnNm=sumFnNm,
-                        permtype=permtype,Tstar=Tstar))
+                        infertype=infertype,Tstar=Tstar))
 }
 class(rslt) <- "kanova"
 rslt

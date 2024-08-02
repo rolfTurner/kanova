@@ -185,8 +185,41 @@ Fixed same bug (!!!) when type was equal to "oneway".
 Revised the "testStat" vignette a bit.
 
 19/07/2024
-
+`
 Further fiddling with the vignette.
 
 Incremented the version number.
 Version 0.1-4.
+
+21/07/2024
+
+Changed email address to my posteo address, in the DESCRIPTION
+file.  Changed "anova" to "Anova" in the title (should be in
+title case).  Wrapped a bit of the kanova() examples in \dontrun{}
+to reduce the time a bit.  (Winbuilder said the toadal time was
+12.14 > 10.00 seconds.  I get only 8.927 seconds in my timing
+calculations. (???) Irrespective of that,  I cut a bit out.
+
+Incremented the version number.
+Version 0.1-5.
+
+25/07/2024
+
+Further tweaks to the vignette.
+
+Incremented the version number.
+Version 0.1-6.
+
+01/08/2024
+
+Added a file First.R to produce a startup message.
+
+Introduced "Gaussian sampling" as a means of generating data, under the
+null hypothesis, upon which to base Monte Carlo tests.
+
+- changed argument name "permtype" to "infertype", with possible values
+  "resperm", "datperm", and "gaussSample"
+- replaced function permSumFns() by simSimFns()
+
+Incremented the version number.
+Version 0.1-7.
