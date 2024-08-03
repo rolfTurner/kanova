@@ -1,6 +1,0 @@
-\documentclass{article}
-\usepackage{pdfpages}
-%\VignetteIndexEntry{testStat}
-\begin{document}
-\includepdf[pages=-, fitpaper=true]{testStat.pdf}
-\end{document}
