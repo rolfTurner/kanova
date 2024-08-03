@@ -23,7 +23,7 @@
   left hand side of \code{fmla} must be supplied (and must be the
   name of the column which consists of a list of point patterns).
 }
-  \item{data}{A hyperframe (see \code{\link{hyperframe}()})
+  \item{data}{A hyperframe (see \code{\link[spatstat.geom]{hyperframe}()})
   containing the data to be analysed.  It must have a column with
   a name which matches that of the response variable as determined
   by \code{fmla}).  If no such column exists, an error is thrown.
@@ -176,7 +176,7 @@ DOI: 10.1080/01621459.2012.688463.
 }
 
 \seealso{
-\code{\link{studpermu.test}()}
+\code{\link[spatstat.explore]{studpermu.test}()}
 }
 
 \examples{
