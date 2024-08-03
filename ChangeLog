@@ -209,17 +209,3 @@ Further tweaks to the vignette.
 
 Incremented the version number.
 Version 0.1-6.
-
-01/08/2024
-
-Added a file First.R to produce a startup message.
-
-Introduced "Gaussian sampling" as a means of generating data, under the
-null hypothesis, upon which to base Monte Carlo tests.
-
-- changed argument name "permtype" to "infertype", with possible values
-  "resperm", "datperm", and "gaussSample"
-- replaced function permSumFns() by simSimFns()
-
-Incremented the version number.
-Version 0.1-7.

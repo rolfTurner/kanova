@@ -14,7 +14,6 @@ if(type %in% c("oneway","addit")) {
     M     <- M/V
     Tstat <- apply(M,2,trapint,r=r)
     Tstat <- sum(enns*Tstat)
-browser()
 } else if(type=="interac") {
     xxx   <- builds2Khat(sumFns,wts,splif=AB,do.s2=TRUE)
     na    <- length(levels(A))

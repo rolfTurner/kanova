@@ -126,7 +126,9 @@ if(is.null(B)) {
     AB <- interaction(B,A)
 }
 
-# Set "splif" and check on adequacy of cell counts.
+# Build Khat (the overall estimate of the unique K function, common
+# to all groups under the null hypothesis of no group effects),
+# and s2, the overall sample variance.
 if(type %in% c("oneway","addit")) {
     splif <- A
 } else if(type == "interac") {

@@ -1,6 +1,6 @@
 Package: kanova
-Version: 0.1-7
-Date: 2024-08-01
+Version: 0.1-6
+Date: 2024-07-25
 Title: Pseudo Anova for K-functions
 Author: Rolf Turner <rolfturner@posteo.net>
 Maintainer: Rolf Turner <rolfturner@posteo.net>
@@ -13,3 +13,5 @@ VignetteBuilder: R.rsp
 LazyData: true
 Depends: R (>= 3.2.2)
 License: GPL (>=2)
+NeedsCompilation: no
+Packaged: 2024-07-25 00:22:58 UTC; rolf
