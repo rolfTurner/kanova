@@ -244,5 +244,12 @@ code now works for all four summary functions, not just for Kest().
 Edited the vignette to reflect the current state of affairs.
 
 Added some remarks on fitted values and residuals (mainly via
-reference to the vignette) to the help for kanova().  Incremented the
-version number.  Version 0.1-8.
+reference to the vignette) to the help for kanova().
+
+Changed the syntax for specifying the name of the summary function.
+It is no longer required to be one of "Kest", "Fest", "Gest" or
+"Jest".  If left NULL it defaults to "Kest".  This may be a bit,
+uh, fragile.
+
+Incremented the version number.
+Version 0.1-8.

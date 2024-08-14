@@ -1,4 +1,4 @@
-kanova <- function(fmla,data,expo=2,rsteps=128,sumFnNm=c("Kest","Fest","Gest","Jest"),
+kanova <- function(fmla,data,expo=2,rsteps=128,sumFnNm=NULL,warnSFN=TRUE,
                    test=TRUE,permtype=c("resids","data"),nperm=99,
                    brief=TRUE,verb=TRUE) {
 #
@@ -8,7 +8,12 @@ kanova <- function(fmla,data,expo=2,rsteps=128,sumFnNm=c("Kest","Fest","Gest","J
 # A and B.
 #
 
-sumFnNm  <- match.arg(sumFnNm)
+if(is.null(sumFnNm)) sumFnNm <- "Kest"
+if(!(sumFnNm %in% c("Kest","Fest","Gest","Jest")) & warnSFN) {
+    whinge <- paste0("Argument \"sumFnNm\" is \"",sumFnNm,"\", which is not\n",
+                     "  one of the standard four.  The results may be fragile.\n")
+    warning(whinge)
+}
 permtype <- match.arg(permtype)
 
 if(length(fmla)==2) {

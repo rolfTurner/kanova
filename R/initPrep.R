@@ -93,7 +93,7 @@ if(bldSumFns) {
         if(any(wts==0)) stop("Some point patterns in \"data\" are empty.\n")
         wts   <- wts^expo
         sumFn <- get(sumFnNm)
-        Let   <- substr(sumFnNm,1,1)
+        Let   <- if(sumFnNm=="Kest") "K" else "F"
         if(requireNamespace("spatstat.explore")) {
             rtop  <- min(sapply(mikes,function(x){
                          spatstat.explore::rmax.rule(Let,

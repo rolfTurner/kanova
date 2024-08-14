@@ -10,7 +10,7 @@
     the K-function.
 }
 \usage{
-    kanova(fmla,data,expo=2,rsteps=128,sumFnNm=c("Kest","Fest","Gest","Jest"),
+    kanova(fmla,data,expo=2,rsteps=128,sumFnNm=NULL,warnSFN=TRUE,
            test=TRUE,permtype=c("resids","data"),nperm=99,
            brief=TRUE,verb=TRUE)
 }
@@ -83,8 +83,17 @@
   in the response and on their intensities.  It also depends on the
   summary function being used.
 }
-  \item{sumFnNm}{Character string naming the summary function to
-  be used.
+  \item{sumFnNm}{Character string naming the summary function
+  to be used.  If this is not one of the \dQuote{standard
+  four}, i.e. `\code{"Kest"}, \code{"Fest"},  \code{"Gest"}, or
+  \code{"Jest"},and if \code{warnSFN} (see below) is \code{TRUE},
+  then a warning is issued.  In this case \bold{there may
+  be problems}; the code is not robust in this respect.
+  If \code{sumFnNm} is not specified (left \code{NULL}) then it
+  defaults to \code{"Kest"}.
+}
+  \item{warnSFN}{Logical scalar.  Should a warning be issued if
+  \code{sumFnNm} is not one of the \dQuote{standard four}?
 }
   \item{test}{Logical scalar.  Should a Monte Carlo test of the
   null hypothesis be carried out?
