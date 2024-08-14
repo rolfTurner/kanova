@@ -2,6 +2,9 @@
 # Export everything.
 exportPattern("^[^.]")
 importFrom("spatstat.geom","hyperframe","is.hyperframe",
-           "as.hyperframe","owin","plot.ppp","npoints")
-importFrom("spatstat.explore","Kest","Gest","Fest","studpermu.test")
+           "as.hyperframe","owin","plot.ppp","npoints",
+           "Window","intensity")
+importFrom("spatstat.explore","Kest","Gest","Fest","Jest",
+           "studpermu.test","rmax.rule")
+importFrom("spatstat.random","rpoispp")
 importFrom("stats","terms","formula")

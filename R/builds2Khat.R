@@ -13,16 +13,19 @@ G      <- length(splitS)
 
 splitS <- lapply(splitS,function(x){
                             do.call(cbind,as.list(x))})
-# Now each entry of splitS is an (r x n) matrix, n = number
-# of replicates in the corresponding group.  I.e. the
-# j-th column of that matrix is the j-th K-function in
-# that group.
+# Now each entry of splitS is an (s x n) matrix, where s is the
+# length of the summary function argument "r", and n is the number
+# of replicates in the corresponding group.  I.e. the j-th column
+# of that matrix is the j-th K-function in that group.
 
 splitw <- split(wts,f=splif)
-# Each entry of splitw is an n-vector of (positive) weights,
-# the j-entry of that vector being the weight for the j-th
-# member of the corresponding group.
+# Each entry of splitw is a a list whose entries are weight vectors.
+# The lengths of these vectors are either all equal to the length
+# of the summary function argument "r", or all equal to 1.  The
+# j-entry of that list is the weight vector for the j-th member of
+# the corresponding group.
 
+# Got here.
 Khatgp <- lapply(1:G,function(g,S,w){
                      S[[g]]%*%(w[[g]]/sum(w[[g]]))
                      },S=splitS,w=splitw)

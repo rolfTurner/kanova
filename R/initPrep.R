@@ -1,4 +1,4 @@
-initPrep <- function(data,rspNm=NULL,Anm,Bnm=NULL,sumFnNm,type) {
+initPrep <- function(data,rspNm=NULL,Anm,Bnm=NULL,sumFnNm,type,expo,rsteps) {
 #
 # Function to prepare a list whose entries correspond to the
 # model cells and are (or are interpretable as) summary functions
@@ -87,13 +87,22 @@ if(inherits(data[,rspNm,drop=TRUE],"ppplist")) {
 }
 
 if(bldSumFns) {
-    mikes <- data[,rspNm,drop=TRUE]
     if(requireNamespace("spatstat.geom")) {
-        wts    <- sapply(mikes,spatstat.geom::npoints)
+        mikes <- data[,rspNm,drop=TRUE]
+        wts   <- sapply(mikes,spatstat.geom::npoints)
         if(any(wts==0)) stop("Some point patterns in \"data\" are empty.\n")
-        sumFn  <- get(sumFnNm)
-        sFraw  <- lapply(mikes,sumFn)
-        r      <- sFraw[[1]]$r
+        wts   <- wts^expo
+        sumFn <- get(sumFnNm)
+        Let   <- substr(sumFnNm,1,1)
+        if(requireNamespace("spatstat.explore")) {
+            rtop  <- min(sapply(mikes,function(x){
+                         spatstat.explore::rmax.rule(Let,
+                         spatstat.geom::Window(x),spatstat.geom::intensity(x))})) 
+        } else {
+            stop("Required package \"spatstat.explore\" is not available.\n")
+        }
+        r      <- seq(0,rtop,length=rsteps+1)
+        sFraw  <- lapply(mikes,sumFn,r=r)
         sumFns <- lapply(sFraw,function(x){x[[attr(x,"valu")]]})
         sumFns <- lapply(1:length(sumFns),function(k,x,w){
                                           attr(x[[k]],"weight") <- w[k]
@@ -105,18 +114,6 @@ if(bldSumFns) {
     sumFns <- data[,rspNm,drop=TRUE]
 }
 
-# Re-normalise the weights to have maximum 1.  (Not sure
-# about this idea!!! Perhaps mean 1???  Or to sum to 1???
-# Or just don't fuck around with them?)  The intent is to
-# avoid overflow which might result from large weights.
-# Note that re-normalising the weights does *not* (I'm pretty
-# sure) screw up the assertion that s2 (see builds2Khat.R) is
-# an unbiased estimate of sigma^2(r).  The value of sigma^2(r)
-# being estimated changes to sigma_M^2(r) = sigma^2(r)/M, where
-# M is the normalising constant by which "wts" is being divided.
-# But this (I'm pretty sure) does not matter.
-wts <- wts/max(wts)
-
 # Using interaction(B,A) r.t. interaction(A,B) seems counterintuitive,
 # but is necessary for making "permute within" work; at least the way
 # I currently have things structured.
@@ -126,9 +123,7 @@ if(is.null(B)) {
     AB <- interaction(B,A)
 }
 
-# Build Khat (the overall estimate of the unique K function, common
-# to all groups under the null hypothesis of no group effects),
-# and s2, the overall sample variance.
+# Check that the cell counts are adequate.
 if(type %in% c("oneway","addit")) {
     splif <- A
 } else if(type == "interac") {

@@ -1,4 +1,4 @@
-kanova <- function(fmla,data,sumFnNm=c("Kest","Fest","Gest","Jest"),
+kanova <- function(fmla,data,expo=2,rsteps=128,sumFnNm=c("Kest","Fest","Gest","Jest"),
                    test=TRUE,permtype=c("resids","data"),nperm=99,
                    brief=TRUE,verb=TRUE) {
 #
@@ -64,7 +64,8 @@ switch(EXPR=npreds,
     }
 )
 # Initial (real) data:
-iDat <- initPrep(data,rspNm,Anm=Anm,Bnm=Bnm,sumFnNm=sumFnNm,type=type)
+iDat <- initPrep(data,rspNm=rspNm,Anm=Anm,Bnm=Bnm,sumFnNm=sumFnNm,
+            type=type,expo=expo,rsteps=rsteps)
 
 # Calculate the statistic.
 Tobs <- with(iDat,testStat(sumFns,A,B,AB,wts,r,type=type))

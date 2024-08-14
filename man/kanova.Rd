@@ -10,7 +10,7 @@
     the K-function.
 }
 \usage{
-    kanova(fmla,data,sumFnNm=c("Kest","Fest","Gest","Jest"),
+    kanova(fmla,data,expo=2,rsteps=128,sumFnNm=c("Kest","Fest","Gest","Jest"),
            test=TRUE,permtype=c("resids","data"),nperm=99,
            brief=TRUE,verb=TRUE)
 }
@@ -49,7 +49,7 @@
   (or objects) must be factors.
 
   If the response consists of numeric vectors, and if these vectors
-  are \emph{not} scalars, then \code{data} must have an attribute
+  are `\emph{not} scalars, then \code{data} must have an attribute
   \code{"r"}  which specifies the \dQuote{argument} of the pseudo
   summary functions in the list.  This attribute should be an
   numeric vector and must be of the same length as the numeric
@@ -64,6 +64,24 @@
   response column consists of a list of point patterns then any
   column name \code{"wts"} is ignored, and the weights are indeed
   taken to be the numbers of points in those patterns.
+}
+  \item{expo}{Numeric scalar.  Not used unless the response is a list
+  of point patterns.  Statistics in \code{kanova} are calculated as
+  \emph{weighted} means with the weights being the reciprocals of the
+  counts of points in the patterns, raised to the power \code{expo}.
+  To use unweighted means, set \code{expo=0}.  If \code{expo} is
+  equal to \code{1} then the weights are simply the pattern counts.
+  See the vignette \code{"testStat"} for a brief discussion of
+  the impact of using these weights.
+}
+  \item{rsteps}{Integer scalar.  Not used unless the response is a list
+  of point patterns. The number of (equal) steps between
+  values of the vector \code{r} at which the summary function is
+  evaluated.  The values of \code{r} are equispaced on the interval from
+  0 to \code{rtop}, the latter being calculated internally.  The value
+  of \code{rtop} depends on the observation windows of the patterns
+  in the response and on their intensities.  It also depends on the
+  summary function being used.
 }
   \item{sumFnNm}{Character string naming the summary function to
   be used.
@@ -109,16 +127,23 @@
   numerical integrals of certain sums of squares.  The integrals
   are computed via a rough trapezoid rule and the sums of squares
   are \dQuote{studentised}.  I.e. they are  downweighted by the
-  estimated variance of the quantity being squared.  The integration
-  is carried out over the value of \code{r}, the argument of
-  the summary functions that are being analysed.  If the reponse
-  consists of numeric vectors of length 1, i.e. of scalars,
+  estimated variance of the quantity being squared.  The quantities
+  that are involved in the sums of squares are formed from certain
+  \dQuote{fitted values} which are (as indicate above) weighted
+  means of the observations.  The variance referred to is formed
+  as a weighted mean of squares of the residuals, which are of
+  course equal to the observations minus the fitted values.
+
+  The integration is carried out over the value of \code{r}, the
+  argument of the summary functions that are being analysed.  If the
+  reponse consists of numeric vectors of length 1, i.e. of scalars,
   then no integration is in fact performed, and the corresponding
   (downweighted) sum of squares is returned.  You may, if you like,
   think of this as integrating with respect to a measure which has
   a point mass of 1 at the conceptual single value of \code{r}.
 
-  More detail about the test statistic can be found in the vignette
+  More detail about the test statistic, the fitted values, the
+  residuals and the estimated variance, can be found in the vignette
   \code{"testStat"}.
 }
 
@@ -129,7 +154,7 @@
   the code and the answer should be obvious.  It \emph{might} be
   possible to implement higher order pseudo analysis of variance of
   summary functions, but this is unlikely to have any practical use.
-  Writing the code would be a nightmare!
+  Writing the code would, for me, be a nightmare!
 }
 
 \value{If \code{brief} is \code{TRUE}, the object returned is
@@ -191,10 +216,14 @@ s2 <- kanova(patterns ~ Layer + Pos, data=stomata,permtype="d")
 
 # Here we are testing for a Pos effect allowing for a Layer effect.
 set.seed(78)
-s3 <- kanova(patterns ~ Pos + Layer, data=stomata) # permtype defaults to "r"
+s3 <- kanova(patterns ~ Pos + Layer, data=stomata)
+# permtype defaults to "resperm".
 \dontrun{ # Takes too long.
     set.seed(24)
-    s3a <- kanova(patterns ~ Pos + Layer, data=stomata,nperm=999) # Likewise.
+    s3a <- kanova(patterns ~ Pos + Layer, data=stomata,nperm=999)
+}
+# permtype defaults to "resperm".
+\dontrun{ # Takes too long.
     # Get a p-value of 0.001
 }
 
@@ -203,9 +232,11 @@ set.seed(2)
 s4 <- kanova(patterns ~ Layer * Pos, data=stomata) # permtype must be "r"
 
 # Articial data.
+if(!requireNamespace("spatstat.geom"))
+    stop("Required package \"spatstat.geom\" is not available.\n")
 set.seed(3)
-r    <- seq(0,25,length=512)
-rsp  <- lapply(1:144,function(k){pi*r^2 + runif(512,-0.1,0.1)})
+r    <- seq(0,25,length=128)
+rsp  <- lapply(1:144,function(k){pi*r^2 + runif(128,-0.1,0.1)})
 rsp  <- lapply(rsp,function(x){pmax(0,x)})
 fac1 <- factor(rep(1:4,12,each=3))
 fac2 <- factor(rep(1:3,48))
@@ -229,6 +260,8 @@ if(require(Devore7)) {
     chk <- lm(Tempr ~ Period*Strain,data=X)
 # anova(chk) reveals p-values that are at least roughly
 # similar to those in s6a, s6b, and s6c.
+} else {
+    stop("Required package \"Devore7\" is not available.\n")
 }
 }
 }

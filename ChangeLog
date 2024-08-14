@@ -209,3 +209,40 @@ Further tweaks to the vignette.
 
 Incremented the version number.
 Version 0.1-6.
+
+03/08/2024
+Adjusted the vignette structure so that the package would build
+under rhub, by using the "asis" concept from the R.rsp package.
+The vignette directory now holds vignetteForTestStat.pdf and
+vignetteForTestStat.pdf.asis.
+
+Created a directory preVignettes, parellel with vignettes, to
+hold the components (kanova.bib, testStat.ltx) from which the file
+vignetteForTestStat.pdf, in the vignettes directory, can be built.
+
+Incremented the version number.
+Version 0.1-7.
+
+12/08/2024
+Added the function ripVar() to calculate the variance of the
+K-function of a Poisson process.  (Was intending to make use of
+this function in calculating the test statistics, but since the
+procedure is only valid for Poisson processes I decided that this
+was pointless.)
+
+13/08/2024
+Added the arguments "expo" and "rsteps" to kanova() and to
+initPrep().
+
+Adjusted the initPrep() code so that the length of the "r" argument
+to the summary function is rsteps+1 (where rsteps defaults to 128).
+Rather than (in the case of Kest()) being hard-wired to 513.
+Adjusted the code so that the "r" argument consists of values on the
+interval [0,rtop] where rtop is calculated by rmax.rule().  So the
+code now works for all four summary functions, not just for Kest().
+
+Edited the vignette to reflect the current state of affairs.
+
+Added some remarks on fitted values and residuals (mainly via
+reference to the vignette) to the help for kanova().  Incremented the
+version number.  Version 0.1-8.
