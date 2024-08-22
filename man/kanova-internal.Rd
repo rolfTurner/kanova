@@ -14,7 +14,7 @@
 }
 \usage{
 builds2Khat(sumFns,wts,splif,do.s2=TRUE)
-initPrep(data,rspNm=NULL,Anm,Bnm=NULL,sumFnNm,type,expo,rsteps)
+initPrep(data,rspNm=NULL,Anm,Bnm=NULL,sumFnNm,type,expo,rsteps,r)
 ordinal(k)
 ordinalsuffix(k)
 permSumFns(sumFns,B,rAndF,permtype)

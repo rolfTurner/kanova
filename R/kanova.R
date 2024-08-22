@@ -1,6 +1,6 @@
-kanova <- function(fmla,data,expo=2,rsteps=128,sumFnNm=NULL,warnSFN=TRUE,
-                   test=TRUE,permtype=c("resids","data"),nperm=99,
-                   brief=TRUE,verb=TRUE) {
+kanova <- function(fmla,data,expo=2,rsteps=128,r=NULL,sumFnNm=NULL,
+                   warnSFN=TRUE,test=TRUE,permtype=c("resids","data"),
+                   nperm=99,brief=TRUE,verb=TRUE) {
 #
 # Function to conduct one or two-way analysis of variance of
 # summary functions (Kest, Fest, Gest, or Jest)  of replicated point
@@ -70,7 +70,7 @@ switch(EXPR=npreds,
 )
 # Initial (real) data:
 iDat <- initPrep(data,rspNm=rspNm,Anm=Anm,Bnm=Bnm,sumFnNm=sumFnNm,
-            type=type,expo=expo,rsteps=rsteps)
+            type=type,expo=expo,rsteps=rsteps,r=r)
 
 # Calculate the statistic.
 Tobs <- with(iDat,testStat(sumFns,A,B,AB,wts,r,type=type))

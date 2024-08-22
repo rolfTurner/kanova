@@ -10,9 +10,9 @@
     the K-function.
 }
 \usage{
-    kanova(fmla,data,expo=2,rsteps=128,sumFnNm=NULL,warnSFN=TRUE,
-           test=TRUE,permtype=c("resids","data"),nperm=99,
-           brief=TRUE,verb=TRUE)
+    kanova(fmla,data,expo=2,rsteps=128,r=NULL,sumFnNm=NULL,
+           warnSFN=TRUE,test=TRUE,permtype=c("resids","data"),
+           nperm=99,brief=TRUE,verb=TRUE)
 }
 \arguments{
   \item{fmla}{A formula specifying the model to be fitted.  There can
@@ -74,23 +74,37 @@
   See the vignette \code{"testStat"} for a brief discussion of
   the impact of using these weights.
 }
-  \item{rsteps}{Integer scalar.  Not used unless the response is a list
-  of point patterns. The number of (equal) steps between
-  values of the vector \code{r} at which the summary function is
-  evaluated.  The values of \code{r} are equispaced on the interval from
-  0 to \code{rtop}, the latter being calculated internally.  The value
-  of \code{rtop} depends on the observation windows of the patterns
-  in the response and on their intensities.  It also depends on the
-  summary function being used.
+  \item{rsteps}{Integer scalar.  Ignored if argument \code{r}
+  (see below) is supplied (i.e. is not \code{NULL}), or if the
+  response consists of a list of numeric vectors (rather than a
+  list of point patterns. The argument \code{rsteps} specifies the
+  number of (equal) steps between values of the vector \code{r} at
+  which the summary function is evaluated.  The values of \code{r}
+  are equispaced on the interval from 0 to \code{rtop}, the latter
+  being calculated internally.  The value of \code{rtop} depends
+  on the observation windows of the patterns in the response and
+  on their intensities.  It also depends on the summary function
+  being used.
 }
-  \item{sumFnNm}{Character string naming the summary function
-  to be used.  If this is not one of the \dQuote{standard
-  four}, i.e. `\code{"Kest"}, \code{"Fest"},  \code{"Gest"}, or
+  \item{r}{Numeric vector.  Specifies the values (distances) at
+  which the summary/diagnostic function (see below) is evaluated.
+  Users should specify \code{r} only if they really know what they
+  are doing.  Errors may be thrown if the first entry of \code{r}
+  is not 0, or if the values of \code{r} are not sufficiently
+  finely spaced.  If the summary function is \code{Kest()}, then
+  it is unlikely that there is anything to be gained by specifying
+  \code{r}.
+}
+  \item{sumFnNm}{Character string naming the summary/diagnostic
+  function to be used.  If this is not one of the \dQuote{standard
+  four}, i.e. \code{"Kest"}, \code{"Fest"},  \code{"Gest"}, or
   \code{"Jest"},and if \code{warnSFN} (see below) is \code{TRUE},
   then a warning is issued.  In this case \bold{there may
   be problems}; the code is not robust in this respect.
   If \code{sumFnNm} is not specified (left \code{NULL}) then it
-  defaults to \code{"Kest"}.
+  defaults to \code{"Kest"}.  Users should apply summary functions
+  other than \code{Kest()} only if they have a sound understanding
+  of what they are doing.  See \bold{Notes}.
 }
   \item{warnSFN}{Logical scalar.  Should a warning be issued if
   \code{sumFnNm} is not one of the \dQuote{standard four}?
@@ -156,16 +170,33 @@
   \code{"testStat"}.
 }
 
-\section{Note}{
-  Only one-way and two-way (pseudo) analyses of variance are
-  accommodated.  If you feel inclined to ask why there is not
+\section{Notes}{
+  \itemize{
+  \item Simulation experiments have given some evidence that
+  \code{Fest()} and \code{Gest()} lead to tests that have
+  substantially lower power than that obtained than tests obtained
+  by using \code{Kest()}.  In a similar vein, simulation experiments
+  have indicated that \code{Jest()} leads to tests that reject the
+  null hypothesis too readily.  I.e. such tests reject the null
+  hypothesis too frequently when the true model differs from the
+  null model \dQuote{only by a small amount}.  In particular the
+  achieved significance level of such tests is too large.
+
+  Consequently, users are advised to eschew the use of \code{Fest()},
+  \code{Gest()} and \code{Jest()} (despite their ready availability)
+  and to stick with the default summary function \code{Kest()}.
+  Users should ignore this advice \emph{only} if they have a sound
+  reason for doing so and a sound understanding of the consequences.
+
+  \item Only one-way and two-way (pseudo) analyses of variance
+  are accommodated.  If you feel inclined to ask why there is not
   provision for higher order analysis of variance, just look at
   the code and the answer should be obvious.  It \emph{might} be
   possible to implement higher order pseudo analysis of variance of
   summary functions, but this is unlikely to have any practical use.
   Writing the code would, for me, be a nightmare!
+  }
 }
-
 \value{If \code{brief} is \code{TRUE}, the object returned is
   a list with components
  \item{stat}{Numerical scalar equal to the value of the test statistic

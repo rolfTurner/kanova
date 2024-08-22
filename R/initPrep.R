@@ -1,4 +1,4 @@
-initPrep <- function(data,rspNm=NULL,Anm,Bnm=NULL,sumFnNm,type,expo,rsteps) {
+initPrep <- function(data,rspNm=NULL,Anm,Bnm=NULL,sumFnNm,type,expo,rsteps,r) {
 #
 # Function to prepare a list whose entries correspond to the
 # model cells and are (or are interpretable as) summary functions
@@ -93,15 +93,17 @@ if(bldSumFns) {
         if(any(wts==0)) stop("Some point patterns in \"data\" are empty.\n")
         wts   <- wts^expo
         sumFn <- get(sumFnNm)
+        if(is.null(r)) {
         Let   <- if(sumFnNm=="Kest") "K" else "F"
-        if(requireNamespace("spatstat.explore")) {
-            rtop  <- min(sapply(mikes,function(x){
-                         spatstat.explore::rmax.rule(Let,
-                         spatstat.geom::Window(x),spatstat.geom::intensity(x))})) 
-        } else {
-            stop("Required package \"spatstat.explore\" is not available.\n")
+            if(requireNamespace("spatstat.explore")) {
+                rtop  <- min(sapply(mikes,function(x){
+                             spatstat.explore::rmax.rule(Let,
+                             spatstat.geom::Window(x),spatstat.geom::intensity(x))})) 
+            } else {
+                stop("Required package \"spatstat.explore\" is not available.\n")
+            }
+            r      <- seq(0,rtop,length=rsteps+1)
         }
-        r      <- seq(0,rtop,length=rsteps+1)
         sFraw  <- lapply(mikes,sumFn,r=r)
         sumFns <- lapply(sFraw,function(x){x[[attr(x,"valu")]]})
         sumFns <- lapply(1:length(sumFns),function(k,x,w){

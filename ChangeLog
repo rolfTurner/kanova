@@ -248,8 +248,21 @@ reference to the vignette) to the help for kanova().
 
 Changed the syntax for specifying the name of the summary function.
 It is no longer required to be one of "Kest", "Fest", "Gest" or
-"Jest".  If left NULL it defaults to "Kest".  This may be a bit,
-uh, fragile.
+"Jest".  This may be a bit, uh, fragile. If left NULL the name
+defaults to "Kest".
 
 Incremented the version number.
 Version 0.1-8.
+
+22/08/2024
+Made "r" an (optional) argument of kanova(), defaulting to NULL.
+If left NULL then the default value of r is created as it was
+previously.
+
+Modified the help accordingly.
+
+Added comments to the help to the effect that users should exercise
+caution in using summary functions other than Kest().
+
+Incremented the version number.
+Version 0.1-9.
